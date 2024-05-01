@@ -12,17 +12,31 @@ type Users interface {
 }
 
 type Quests interface {
+	Get(userId int) ([]models.Quest, error)
+	GetById(id, userId int) (*models.Quest, error)
+	Create(quest models.Quest, userId int) (int, error)
+	Update(id, userId int, quest models.Quest) error
+	Delete(id, userId int) error
 }
 
 type Pets interface {
+	Get(userId int) ([]models.Pet, error)
+	GetById(petId, userId int) (*models.Pet, error)
+	AddToUser(petId, userId int) error
 }
 
 type Eggs interface {
+	Get(userId int) ([]models.Egg, error)
+	AddToUser(eggId, userId int) error
+	DeleteFromUser(eggId, userId int) error
 }
 
 // repository struct
 type Repository struct {
 	Users
+	Quests
+	Pets
+	Eggs
 }
 
 func NewRepository() *Repository {
@@ -34,6 +48,8 @@ func NewRepository() *Repository {
 
 	databaseUrl := helpers.GetByKey("DATABASE_URL")
 	return &Repository{
-		Users: NewUserRepository(databaseUrl),
+		Users:  NewUserRepository(databaseUrl),
+		Quests: NewQuestRepository(databaseUrl),
+		Pets:   NewPetRepository(databaseUrl),
 	}
 }
