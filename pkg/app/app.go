@@ -27,10 +27,10 @@ func Start() {
 
 	api := router.Group("/api", handler.AuthMiddleware())
 	{
+		api.POST("/logout", handler.LogOut)
 		account := api.Group("/account")
 		{
-			account.GET("/info")
-			account.POST("/logout")
+			// account.GET("/info", handler.GetInfo)
 
 			pets := account.Group("/pets")
 			{
@@ -45,7 +45,7 @@ func Start() {
 				eggs.POST("/:id", handler.PostEggs)
 			}
 
-			quests := api.Group("/quests")
+			quests := account.Group("/quests")
 			{
 				quests.GET("/", handler.AllQuests)
 				quests.GET("/:id", handler.ByIdQuest)

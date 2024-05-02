@@ -21,6 +21,7 @@ func (h *Handler) GetPets(c *gin.Context) {
 
 	c.JSON(200, pets)
 }
+
 func (h *Handler) GetPetsById(c *gin.Context) {
 	userId, err := h.GetUserId(c)
 	if err != nil {

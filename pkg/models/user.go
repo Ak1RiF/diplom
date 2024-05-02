@@ -8,7 +8,4 @@ type User struct {
 	TotalExperience       int
 	AmountExperienceToLvl int
 	Lvl                   int
-
-	// Eggs
-	Eggs []Egg
 }

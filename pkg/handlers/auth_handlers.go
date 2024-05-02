@@ -50,3 +50,10 @@ func (h *Handler) SignUp(c *gin.Context) {
 
 	c.Status(200)
 }
+
+func (h *Handler) LogOut(c *gin.Context) {
+	c.Header("Authorization", "")
+	c.JSON(200, gin.H{
+		"message": "goodbye!",
+	})
+}
