@@ -51,5 +51,6 @@ func NewRepository() *Repository {
 		Users:  NewUserRepository(databaseUrl),
 		Quests: NewQuestRepository(databaseUrl),
 		Pets:   NewPetRepository(databaseUrl),
+		Eggs:   NewEggRepository(databaseUrl),
 	}
 }

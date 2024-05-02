@@ -26,11 +26,17 @@ type Pets interface {
 	AddPetToUser(userId, petId int) error
 }
 
+type Eggs interface {
+	GetUserEggs(userId int) ([]*dtos.OutputEgg, error)
+	AddEggToUser(userId, eggId int) error
+}
+
 // Service struct
 type Service struct {
 	Authorization
 	Quests
 	Pets
+	Eggs
 }
 
 func NewService(repository *repository.Repository) *Service {
@@ -38,5 +44,6 @@ func NewService(repository *repository.Repository) *Service {
 		Authorization: NewAuthService(repository.Users),
 		Quests:        NewQuestService(repository.Quests),
 		Pets:          NewPetService(repository.Pets),
+		Eggs:          NewEggService(repository.Eggs),
 	}
 }

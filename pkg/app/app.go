@@ -41,8 +41,8 @@ func Start() {
 
 			eggs := account.Group("/eggs")
 			{
-				eggs.GET("/all")
-				eggs.POST("/:id")
+				eggs.GET("/", handler.GetEggs)
+				eggs.POST("/:id", handler.PostEggs)
 			}
 
 			quests := api.Group("/quests")
