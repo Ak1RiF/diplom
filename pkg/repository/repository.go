@@ -29,6 +29,8 @@ type Eggs interface {
 	Get(userId int) ([]models.Egg, error)
 	AddToUser(eggId, userId int) error
 	DeleteFromUser(eggId, userId int) error
+	AddToCount(eggId, userId int) error
+	TakeFromCount(eggId, userId int) error
 }
 
 // repository struct

@@ -30,7 +30,7 @@ func Start() {
 		api.POST("/logout", handler.LogOut)
 		account := api.Group("/account")
 		{
-			// account.GET("/info", handler.GetInfo)
+			account.GET("/info", handler.GetInfo)
 
 			pets := account.Group("/pets")
 			{
@@ -43,6 +43,8 @@ func Start() {
 			{
 				eggs.GET("/", handler.GetEggs)
 				eggs.POST("/:id", handler.PostEggs)
+				eggs.POST("/add/:id", handler.AddToCountEggs)
+				eggs.POST("/remove/:id", handler.TakeFromCountEggs)
 			}
 
 			quests := account.Group("/quests")

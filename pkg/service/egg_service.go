@@ -24,7 +24,6 @@ func (s *EggService) GetUserEggs(userId int) ([]*dtos.OutputEgg, error) {
 	for _, v := range eggs {
 		eggDto := dtos.OutputEgg{
 			Rarity: v.Rarity,
-			Count:  v.Count,
 		}
 
 		eggsOutput = append(eggsOutput, &eggDto)
@@ -34,6 +33,19 @@ func (s *EggService) GetUserEggs(userId int) ([]*dtos.OutputEgg, error) {
 }
 func (s *EggService) AddEggToUser(userId, eggId int) error {
 	if err := s.eggRepository.AddToUser(eggId, userId); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *EggService) AddToCountEgg(userId, eggId int) error {
+	if err := s.eggRepository.AddToCount(eggId, userId); err != nil {
+		return err
+	}
+	return nil
+}
+func (s *EggService) TakeFromCountEgg(userId, eggId int) error {
+	if err := s.eggRepository.TakeFromCount(eggId, userId); err != nil {
 		return err
 	}
 	return nil

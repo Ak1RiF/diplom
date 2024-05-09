@@ -57,3 +57,29 @@ func (h *Handler) LogOut(c *gin.Context) {
 		"message": "goodbye!",
 	})
 }
+
+type CardInfo struct {
+	User   dtos.OutputUserDto     `json:"user_info"`
+	Quests []*dtos.OutputInputDto `json:"quests"`
+	Pets   []*dtos.OutputPet      `json:"pets"`
+	Eggs   []*dtos.OutputEgg      `json:"eggs"`
+}
+
+func (h *Handler) GetInfo(c *gin.Context) {
+	var cardInfo CardInfo
+
+	userId, err := h.GetUserId(c)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	quests, err := h.services.GetUserQuests(userId)
+	pets, err := h.services.GetUserPets(userId)
+	eggs, err := h.services.GetUserEggs(userId)
+
+	cardInfo.Quests = quests
+	cardInfo.Pets = pets
+	cardInfo.Eggs = eggs
+	c.JSON(200, cardInfo)
+}

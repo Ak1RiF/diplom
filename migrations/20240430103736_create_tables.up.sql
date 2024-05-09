@@ -33,6 +33,7 @@ CREATE TABLE eggs(
 CREATE TABLE users_eggs(
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     egg_id INT REFERENCES eggs(id) ON DELETE CASCADE,
+    count INT,
     PRIMARY KEY (user_id, egg_id)
 );
 

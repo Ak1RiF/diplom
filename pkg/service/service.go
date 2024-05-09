@@ -29,6 +29,8 @@ type Pets interface {
 type Eggs interface {
 	GetUserEggs(userId int) ([]*dtos.OutputEgg, error)
 	AddEggToUser(userId, eggId int) error
+	AddToCountEgg(userId, eggId int) error
+	TakeFromCountEgg(userId, eggId int) error
 }
 
 // Service struct

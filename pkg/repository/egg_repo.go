@@ -56,6 +56,24 @@ func (r *EggRepository) AddToUser(eggId, userId int) error {
 	return nil
 
 }
+
+func (r *EggRepository) AddToCount(eggId, userId int) error {
+	query := `UPDATE users_eggs SET count = count + 1 WHERE user_id = $1 AND egg_id = $2`
+	_, err := r.db.Exec(context.Background(), query, userId, eggId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *EggRepository) TakeFromCount(eggId, userId int) error {
+	query := `UPDATE users_eggs SET count = count - 1 WHERE user_id = $1 AND egg_id = $2`
+	_, err := r.db.Exec(context.Background(), query, userId, eggId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *EggRepository) DeleteFromUser(eggId, userId int) error {
 	return nil
 
