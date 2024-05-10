@@ -24,6 +24,20 @@ func NewUserRepository(databaseUrl string) *UserRepository {
 }
 
 // implementations
+func (r *UserRepository) GetById(id int) (*models.User, error) {
+	query := `SELECT id, username, password_hash, avatarUrl, sumExperience, amountExperienceToLvl, lvl FROM users WHERE id = $1`
+	var user models.User
+
+	row := r.db.QueryRow(context.Background(), query, id)
+	err := row.Scan(&user.Id, &user.Username, &user.PasswordHash, &user.AvatarUrl, &user.TotalExperience, &user.AmountExperienceToLvl, &user.Lvl)
+	if err != nil {
+		// log
+		return nil, err
+	}
+	//log
+	return &user, nil
+}
+
 func (r *UserRepository) GetByUsername(username string) (*models.User, error) {
 	query := `SELECT id, username, password_hash FROM users WHERE username = $1`
 

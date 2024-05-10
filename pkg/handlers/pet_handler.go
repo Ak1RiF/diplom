@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/todoApp/pkg/dtos"
 )
 
 func (h *Handler) GetPets(c *gin.Context) {
@@ -19,7 +20,11 @@ func (h *Handler) GetPets(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, pets)
+	if len(pets) == 0 {
+		c.JSON(200, gin.H{"pets": []*dtos.OutputPet{}})
+		return
+	}
+	c.JSON(200, gin.H{"pets": pets})
 }
 
 func (h *Handler) GetPetsById(c *gin.Context) {

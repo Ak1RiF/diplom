@@ -7,6 +7,7 @@ import (
 
 // interfaces
 type Users interface {
+	GetById(id int) (*models.User, error)
 	GetByUsername(username string) (*models.User, error)
 	Create(user models.User) error
 }

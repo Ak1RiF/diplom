@@ -22,32 +22,57 @@ func Start() {
 		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE"},
 	}))
 
-	router.POST("/sign-in", handler.SignIn)
-	router.POST("/sign-up", handler.SignUp)
+	// router.POST("/sign-in", handler.SignIn)
+	// router.POST("/sign-up", handler.SignUp)
 
-	api := router.Group("/api", handler.AuthMiddleware())
+	// api := router.Group("/api", handler.AuthMiddleware())
+	// {
+	// 	api.POST("/logout", handler.LogOut)
+	// 	account := api.Group("/account")
+	// 	{
+	// 		account.GET("/info", handler.GetInfo)
+
+	// 		pets := account.Group("/pets")
+	// 		{
+	// 			pets.GET("/", handler.GetPets)
+	// 			pets.GET("/:id", handler.GetPetsById)
+	// 			pets.POST("/:id", handler.PostPets)
+	// 		}
+
+	// 		eggs := account.Group("/eggs")
+	// 		{
+	// 			eggs.GET("/", handler.GetEggs)
+	// 			eggs.POST("/:id", handler.PostEggs)
+	// 			eggs.POST("/add/:id", handler.AddToCountEggs)
+	// 			eggs.POST("/remove/:id", handler.TakeFromCountEggs)
+	// 		}
+
+	// 		quests := account.Group("/quests")
+	// 		{
+	// 			quests.GET("/", handler.AllQuests)
+	// 			quests.GET("/:id", handler.ByIdQuest)
+	// 			quests.POST("/", handler.PostQuest)
+	// 			quests.PUT("/:id", handler.PutQuest)
+	// 			quests.DELETE("/:id", handler.DeleteQuest)
+	// 		}
+
+	// 	}
+	// }
+
+	api := router.Group("/api")
 	{
-		api.POST("/logout", handler.LogOut)
-		account := api.Group("/account")
+		api.POST("/signUp", handler.SignUp)
+		api.POST("/signIn", handler.SignIn)
+
+		protected := api.Group("/protected", handler.AuthMiddleware())
 		{
-			account.GET("/info", handler.GetInfo)
-
-			pets := account.Group("/pets")
+			// userInfo
+			account := protected.Group("/account")
 			{
-				pets.GET("/", handler.GetPets)
-				pets.GET("/:id", handler.GetPetsById)
-				pets.POST("/:id", handler.PostPets)
+				account.GET("/info", handler.GetUserInfo)
 			}
-
-			eggs := account.Group("/eggs")
-			{
-				eggs.GET("/", handler.GetEggs)
-				eggs.POST("/:id", handler.PostEggs)
-				eggs.POST("/add/:id", handler.AddToCountEggs)
-				eggs.POST("/remove/:id", handler.TakeFromCountEggs)
-			}
-
-			quests := account.Group("/quests")
+			// quests
+			quests := protected.Group("/quests")
 			{
 				quests.GET("/", handler.AllQuests)
 				quests.GET("/:id", handler.ByIdQuest)
@@ -55,7 +80,18 @@ func Start() {
 				quests.PUT("/:id", handler.PutQuest)
 				quests.DELETE("/:id", handler.DeleteQuest)
 			}
-
+			// pets
+			pets := protected.Group("/pets")
+			{
+				pets.GET("/", handler.GetPets)
+				pets.GET("/:id", handler.GetPetsById)
+				pets.POST("/:id", handler.PostPets)
+			}
+			// eggs
+			eggs := protected.Group("/eggs")
+			{
+				eggs.GET("/", handler.GetEggs)
+			}
 		}
 	}
 

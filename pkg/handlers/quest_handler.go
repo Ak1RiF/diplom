@@ -20,7 +20,12 @@ func (h *Handler) AllQuests(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, quests)
+	if len(quests) == 0 {
+		c.JSON(200, gin.H{"quests": []*dtos.InputQuestDto{}})
+		return
+	}
+
+	c.JSON(200, gin.H{"quests": quests})
 }
 func (h *Handler) ByIdQuest(c *gin.Context) {
 	questId, err := strconv.Atoi(c.Param("id"))

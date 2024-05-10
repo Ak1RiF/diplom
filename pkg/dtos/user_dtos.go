@@ -6,9 +6,8 @@ type InputUserForm struct {
 }
 
 type OutputUserDto struct {
-	Username              string `json: "username"`
-	AvatarUrl             string `json: "avatar_url"`
-	TotalExperience       int    `json: "exp"`
-	AmountExperienceToLvl int    `json: "expToLvl"`
-	Lvl                   int    `json: "lvl"`
+	Username              string `json:"username"`
+	TotalExperience       int    `json:"exp"`
+	AmountExperienceToLvl int    `json:"expToLvl"`
+	Lvl                   int    `json:"lvl"`
 }

@@ -12,6 +12,10 @@ type Authorization interface {
 	ParseJwt(accessToken string) (int, error)
 }
 
+type Users interface {
+	UserInfo(id int) (*dtos.OutputUserDto, error)
+}
+
 type Quests interface {
 	GetUserQuests(userId int) ([]*dtos.OutputInputDto, error)
 	GetUserQuestById(questId, userId int) (*dtos.OutputInputDto, error)
@@ -39,6 +43,7 @@ type Service struct {
 	Quests
 	Pets
 	Eggs
+	Users
 }
 
 func NewService(repository *repository.Repository) *Service {
@@ -47,5 +52,6 @@ func NewService(repository *repository.Repository) *Service {
 		Quests:        NewQuestService(repository.Quests),
 		Pets:          NewPetService(repository.Pets),
 		Eggs:          NewEggService(repository.Eggs),
+		Users:         NewUserService(repository.Users),
 	}
 }
