@@ -70,12 +70,15 @@ func Start() {
 			account := protected.Group("/account")
 			{
 				account.GET("/info", handler.GetUserInfo)
+				account.PUT("/addExp", handler.AddExpToUser)
 			}
 			// quests
 			quests := protected.Group("/quests")
 			{
 				quests.GET("/", handler.AllQuests)
 				quests.GET("/:id", handler.ByIdQuest)
+				quests.GET("/completed", handler.GetCompletedQuests)
+				quests.PUT("/complete/:id", handler.PointQuestAsCompleted)
 				quests.POST("/", handler.PostQuest)
 				quests.PUT("/:id", handler.PutQuest)
 				quests.DELETE("/:id", handler.DeleteQuest)
@@ -91,6 +94,7 @@ func Start() {
 			eggs := protected.Group("/eggs")
 			{
 				eggs.GET("/", handler.GetEggs)
+				eggs.PUT("/:id", handler.UpdateCount)
 			}
 		}
 	}

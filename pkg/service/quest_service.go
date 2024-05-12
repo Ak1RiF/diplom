@@ -24,6 +24,7 @@ func (s *QuestService) GetUserQuests(userId int) ([]*dtos.OutputInputDto, error)
 	var questsOutput []*dtos.OutputInputDto
 	for _, v := range quests {
 		questDto := dtos.OutputInputDto{
+			Id:          v.Id,
 			Title:       v.Title,
 			Description: v.Description,
 			Dificulty:   v.Dificulty,
@@ -42,6 +43,7 @@ func (s *QuestService) GetUserQuestById(questId, userId int) (*dtos.OutputInputD
 		return nil, err
 	}
 	questOutput := dtos.OutputInputDto{
+		Id:          quest.Id,
 		Title:       quest.Title,
 		Description: quest.Description,
 		Dificulty:   quest.Dificulty,
@@ -86,5 +88,12 @@ func (s *QuestService) RemoveUserQuest(questId, userId int) error {
 		return err
 	}
 	// log
+	return nil
+}
+
+func (s *QuestService) CompleteQuest(questId, userId int) error {
+	if err := s.questRepository.PointAsCompletedById(questId, userId); err != nil {
+		return err
+	}
 	return nil
 }

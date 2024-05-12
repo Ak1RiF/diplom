@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/todoApp/pkg/dtos"
+	"github.com/todoApp/pkg/models"
 	"github.com/todoApp/pkg/repository"
 )
 
@@ -21,8 +22,22 @@ func (s *UserService) UserInfo(id int) (*dtos.OutputUserDto, error) {
 
 	return &dtos.OutputUserDto{
 		Username:              user.Username,
+		AvatarUrl:             user.AvatarUrl,
 		TotalExperience:       user.TotalExperience,
 		AmountExperienceToLvl: user.AmountExperienceToLvl,
 		Lvl:                   user.Lvl,
 	}, nil
+}
+
+func (s *UserService) UpdateUserExperience(userId int, input dtos.UserExperienceInput) error {
+	user := models.User{
+		TotalExperience:       input.AddToCount,
+		AmountExperienceToLvl: input.AmountToLvl,
+	}
+
+	err := s.userRepository.UpdateExperience(userId, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }

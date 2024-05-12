@@ -14,6 +14,7 @@ type Authorization interface {
 
 type Users interface {
 	UserInfo(id int) (*dtos.OutputUserDto, error)
+	UpdateUserExperience(userId int, input dtos.UserExperienceInput) error
 }
 
 type Quests interface {
@@ -22,6 +23,7 @@ type Quests interface {
 	AddUserQuest(input dtos.InputQuestDto, userId int) error
 	UpdateUserQuest(questId, userId int, input dtos.InputQuestDto) error
 	RemoveUserQuest(questId, userId int) error
+	CompleteQuest(questId, userId int) error
 }
 
 type Pets interface {
@@ -31,10 +33,9 @@ type Pets interface {
 }
 
 type Eggs interface {
-	GetUserEggs(userId int) ([]*dtos.OutputEgg, error)
+	GetUserEggs(userId int) (*dtos.OutputEggs, error)
 	AddEggToUser(userId, eggId int) error
-	AddToCountEgg(userId, eggId int) error
-	TakeFromCountEgg(userId, eggId int) error
+	UpdateCountEggs(count, eggId, userId int) error
 }
 
 // Service struct

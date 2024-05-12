@@ -21,6 +21,7 @@ func (s *PetService) GetUserPets(userId int) ([]*dtos.OutputPet, error) {
 	var petsOutput []*dtos.OutputPet
 	for _, v := range pets {
 		petDto := dtos.OutputPet{
+			Id:     v.Id,
 			Name:   v.Name,
 			Rarity: v.Rarity,
 		}
@@ -36,6 +37,7 @@ func (s *PetService) GetUserPet(userId, petId int) (*dtos.OutputPet, error) {
 		return nil, err
 	}
 	petOutput := dtos.OutputPet{
+		Id:     pet.Id,
 		Name:   pet.Name,
 		Rarity: pet.Rarity,
 	}

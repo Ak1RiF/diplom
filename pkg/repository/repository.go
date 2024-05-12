@@ -10,6 +10,7 @@ type Users interface {
 	GetById(id int) (*models.User, error)
 	GetByUsername(username string) (*models.User, error)
 	Create(user models.User) error
+	UpdateExperience(userId int, user models.User) error
 }
 
 type Quests interface {
@@ -18,6 +19,9 @@ type Quests interface {
 	Create(quest models.Quest, userId int) (int, error)
 	Update(id, userId int, quest models.Quest) error
 	Delete(id, userId int) error
+
+	//	GetCompletedQuests(userId int) error
+	PointAsCompletedById(id, userId int) error
 }
 
 type Pets interface {
@@ -27,11 +31,9 @@ type Pets interface {
 }
 
 type Eggs interface {
-	Get(userId int) ([]models.Egg, error)
+	Get(userId int) ([]int, error)
 	AddToUser(eggId, userId int) error
-	DeleteFromUser(eggId, userId int) error
-	AddToCount(eggId, userId int) error
-	TakeFromCount(eggId, userId int) error
+	UpdateCount(count, eggId, userId int) error
 }
 
 // repository struct

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/todoApp/pkg/models"
 )
 
 type EggRepository struct {
@@ -23,10 +22,10 @@ func NewEggRepository(databaseUrl string) *EggRepository {
 	}
 }
 
-func (r *EggRepository) Get(userId int) ([]models.Egg, error) {
-	var eggs []models.Egg
+func (r *EggRepository) Get(userId int) ([]int, error) {
+	var eggs []int
 
-	query := `SELECT e.id, e.rarity FROM pets e JOIN users_eggs up ON e.id = up.egg_id WHERE up.user_id = $1`
+	query := `SELECT count_eggs FROM users_eggs WHERE user_id = $1`
 
 	rows, err := r.db.Query(context.Background(), query, userId)
 	if err != nil {
@@ -35,15 +34,14 @@ func (r *EggRepository) Get(userId int) ([]models.Egg, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var egg models.Egg
+		var count_eggs int
 
-		err := rows.Scan(&egg.Id, &egg.Rarity)
+		err := rows.Scan(&count_eggs)
 		if err != nil {
 			continue
 		}
-		eggs = append(eggs, egg)
+		eggs = append(eggs, count_eggs)
 	}
-
 	return eggs, nil
 }
 func (r *EggRepository) AddToUser(eggId, userId int) error {
@@ -57,24 +55,11 @@ func (r *EggRepository) AddToUser(eggId, userId int) error {
 
 }
 
-func (r *EggRepository) AddToCount(eggId, userId int) error {
-	query := `UPDATE users_eggs SET count = count + 1 WHERE user_id = $1 AND egg_id = $2`
-	_, err := r.db.Exec(context.Background(), query, userId, eggId)
+func (r *EggRepository) UpdateCount(count, eggId, userId int) error {
+	query := `UPDATE users_eggs SET count_eggs = $1 WHERE egg_id = $2 AND user_id = $3`
+	_, err := r.db.Exec(context.Background(), query, count, eggId, userId)
 	if err != nil {
 		return err
 	}
 	return nil
-}
-func (r *EggRepository) TakeFromCount(eggId, userId int) error {
-	query := `UPDATE users_eggs SET count = count - 1 WHERE user_id = $1 AND egg_id = $2`
-	_, err := r.db.Exec(context.Background(), query, userId, eggId)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *EggRepository) DeleteFromUser(eggId, userId int) error {
-	return nil
-
 }

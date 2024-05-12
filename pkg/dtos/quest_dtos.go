@@ -7,6 +7,7 @@ type InputQuestDto struct {
 }
 
 type OutputInputDto struct {
+	Id          int    `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Dificulty   string `json:"dificulty"`

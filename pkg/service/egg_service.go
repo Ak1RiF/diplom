@@ -15,22 +15,36 @@ func NewEggService(repo repository.Eggs) *EggService {
 	}
 }
 
-func (s *EggService) GetUserEggs(userId int) ([]*dtos.OutputEgg, error) {
-	eggs, err := s.eggRepository.Get(userId)
+func (s *EggService) GetUserEggs(userId int) (*dtos.OutputEggs, error) {
+	// eggs, err := s.eggRepository.Get(userId)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// var eggsOutput []*dtos.OutputEgg
+	// for _, v := range eggs {
+	// 	eggDto := dtos.OutputEgg{
+	// 		Rarity: v.Rarity,
+	// 	}
+
+	// 	eggsOutput = append(eggsOutput, &eggDto)
+	// }
+
+	// return eggsOutput, nil
+	counts, err := s.eggRepository.Get(userId)
 	if err != nil {
 		return nil, err
 	}
-	var eggsOutput []*dtos.OutputEgg
-	for _, v := range eggs {
-		eggDto := dtos.OutputEgg{
-			Rarity: v.Rarity,
-		}
 
-		eggsOutput = append(eggsOutput, &eggDto)
+	countEggs := dtos.OutputEggs{
+		CountCommon:    counts[0],
+		CountRare:      counts[1],
+		CountEpic:      counts[2],
+		CountLegendary: counts[3],
 	}
 
-	return eggsOutput, nil
+	return &countEggs, nil
 }
+
 func (s *EggService) AddEggToUser(userId, eggId int) error {
 	if err := s.eggRepository.AddToUser(eggId, userId); err != nil {
 		return err
@@ -38,14 +52,8 @@ func (s *EggService) AddEggToUser(userId, eggId int) error {
 	return nil
 }
 
-func (s *EggService) AddToCountEgg(userId, eggId int) error {
-	if err := s.eggRepository.AddToCount(eggId, userId); err != nil {
-		return err
-	}
-	return nil
-}
-func (s *EggService) TakeFromCountEgg(userId, eggId int) error {
-	if err := s.eggRepository.TakeFromCount(eggId, userId); err != nil {
+func (s *EggService) UpdateCountEggs(count, eggId, userId int) error {
+	if err := s.eggRepository.UpdateCount(count, eggId, userId); err != nil {
 		return err
 	}
 	return nil

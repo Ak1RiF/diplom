@@ -87,3 +87,11 @@ func (r *QuestRepository) Delete(id, userId int) error {
 	}
 	return nil
 }
+
+func (r *QuestRepository) PointAsCompletedById(id, userId int) error {
+	_, err := r.db.Exec(context.Background(), `UPDATE quests SET completed = true WHERE id = $1 AND user_id = $2`, id, userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
