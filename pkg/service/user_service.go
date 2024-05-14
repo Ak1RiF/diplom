@@ -22,7 +22,6 @@ func (s *UserService) UserInfo(id int) (*dtos.OutputUserDto, error) {
 
 	return &dtos.OutputUserDto{
 		Username:              user.Username,
-		AvatarUrl:             user.AvatarUrl,
 		TotalExperience:       user.TotalExperience,
 		AmountExperienceToLvl: user.AmountExperienceToLvl,
 		Lvl:                   user.Lvl,
@@ -37,6 +36,20 @@ func (s *UserService) UpdateUserExperience(userId int, input dtos.UserExperience
 
 	err := s.userRepository.UpdateExperience(userId, user)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *UserService) UpdateUser(userId int, updateUser dtos.UpdateUserFrom) error {
+	user := models.User{
+		Username:              updateUser.Username,
+		TotalExperience:       updateUser.TotalExperience,
+		AmountExperienceToLvl: updateUser.AmountExperienceToLvl,
+		Lvl:                   updateUser.Lvl,
+	}
+
+	if err := s.userRepository.Update(userId, user); err != nil {
 		return err
 	}
 	return nil

@@ -14,6 +14,7 @@ type Authorization interface {
 
 type Users interface {
 	UserInfo(id int) (*dtos.OutputUserDto, error)
+	UpdateUser(userId int, updateUser dtos.UpdateUserFrom) error
 	UpdateUserExperience(userId int, input dtos.UserExperienceInput) error
 }
 

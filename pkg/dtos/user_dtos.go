@@ -5,9 +5,15 @@ type InputUserForm struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type UpdateUserFrom struct {
+	Username              string `json:"username"`
+	TotalExperience       int    `json:"exp"`
+	AmountExperienceToLvl int    `json:"expToLvl"`
+	Lvl                   int    `json:"lvl"`
+}
+
 type OutputUserDto struct {
 	Username              string `json:"username"`
-	AvatarUrl             string `json:"avatar_url"`
 	TotalExperience       int    `json:"exp"`
 	AmountExperienceToLvl int    `json:"expToLvl"`
 	Lvl                   int    `json:"lvl"`

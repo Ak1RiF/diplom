@@ -10,6 +10,7 @@ type Users interface {
 	GetById(id int) (*models.User, error)
 	GetByUsername(username string) (*models.User, error)
 	Create(user models.User) error
+	Update(userId int, user models.User) error
 	UpdateExperience(userId int, user models.User) error
 }
 

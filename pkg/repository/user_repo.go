@@ -25,11 +25,11 @@ func NewUserRepository(databaseUrl string) *UserRepository {
 
 // implementations
 func (r *UserRepository) GetById(id int) (*models.User, error) {
-	query := `SELECT id, username, avatarurl, sumexperience, amountexperiencetolvl, lvl FROM users WHERE id = $1`
+	query := `SELECT id, username, sumexperience, amountexperiencetolvl, lvl FROM users WHERE id = $1`
 	var user models.User
 
 	row := r.db.QueryRow(context.Background(), query, id)
-	err := row.Scan(&user.Id, &user.Username, &user.AvatarUrl, &user.TotalExperience, &user.AmountExperienceToLvl, &user.Lvl)
+	err := row.Scan(&user.Id, &user.Username, &user.TotalExperience, &user.AmountExperienceToLvl, &user.Lvl)
 	if err != nil {
 		// log
 		return nil, err
@@ -71,6 +71,14 @@ func (r *UserRepository) Create(user models.User) error {
 		}
 	}
 	// log
+	return nil
+}
+func (r *UserRepository) Update(userId int, user models.User) error {
+	query := `UPDATE users SET username = $1, sumExperience = $2, amountExperienceToLvl = $3, lvl = $4 WHERE id = $5`
+	_, err := r.db.Exec(context.Background(), query, user.Username, user.TotalExperience, user.AmountExperienceToLvl, user.Lvl, userId)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

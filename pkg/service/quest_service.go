@@ -30,7 +30,6 @@ func (s *QuestService) GetUserQuests(userId int) ([]*dtos.OutputInputDto, error)
 			Dificulty:   v.Dificulty,
 			Completed:   v.Completed,
 		}
-
 		questsOutput = append(questsOutput, &questDto)
 	}
 

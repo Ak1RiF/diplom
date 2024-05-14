@@ -8,6 +8,8 @@ import (
 )
 
 func (h *Handler) AllQuests(c *gin.Context) {
+	var output []*dtos.OutputInputDto
+
 	userId, err := h.GetUserId(c)
 	if err != nil {
 		c.JSON(500, gin.H{"message": err.Error()})
@@ -25,7 +27,13 @@ func (h *Handler) AllQuests(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"quests": quests})
+	for _, v := range quests {
+		if v.Completed == false {
+			output = append(output, v)
+		}
+	}
+
+	c.JSON(200, gin.H{"quests": output})
 }
 func (h *Handler) ByIdQuest(c *gin.Context) {
 	questId, err := strconv.Atoi(c.Param("id"))

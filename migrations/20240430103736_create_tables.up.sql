@@ -2,7 +2,6 @@ CREATE TABLE users(
     id  SERIAL PRIMARY KEY,
 	username VARCHAR(255) NOT NULL,
 	password_hash VARCHAR(255) NOT NULL,
-	avatarUrl VARCHAR(255) DEFAULT 'avatar us missing',
 	sumExperience INT DEFAULT 0,
 	amountExperienceToLvl INT DEFAULT 50,
 	lvl INT DEFAULT 1

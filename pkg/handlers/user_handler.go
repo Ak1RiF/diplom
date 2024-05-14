@@ -41,3 +41,25 @@ func (h *Handler) AddExpToUser(c *gin.Context) {
 
 	c.JSON(200, "User update")
 }
+
+func (h *Handler) UpdateUser(c *gin.Context) {
+	var request *dtos.UpdateUserFrom
+
+	userId, err := h.GetUserId(c)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := h.services.UpdateUser(userId, *request); err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "User was updated"})
+}

@@ -70,6 +70,7 @@ func Start() {
 			account := protected.Group("/account")
 			{
 				account.GET("/info", handler.GetUserInfo)
+				account.PUT("/update", handler.UpdateUser)
 				account.PUT("/addExp", handler.AddExpToUser)
 			}
 			// quests
