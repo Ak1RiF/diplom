@@ -90,11 +90,13 @@ func Start() {
 				pets.GET("/", handler.GetPets)
 				pets.GET("/:id", handler.GetPetsById)
 				pets.POST("/:id", handler.PostPets)
+				pets.PUT("/:id", handler.ChangeNamePet)
 			}
 			// eggs
 			eggs := protected.Group("/eggs")
 			{
 				eggs.GET("/", handler.GetEggs)
+				eggs.GET("/:id", handler.GetEggById)
 				eggs.PUT("/:id", handler.UpdateCount)
 			}
 		}

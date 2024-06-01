@@ -41,6 +41,7 @@ CREATE TABLE users_eggs(
 CREATE TABLE users_pets(
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     pet_id INT REFERENCES pets(id) ON DELETE CASCADE,
+    name_pet VARCHAR(255) NOT NULL,
     PRIMARY KEY (user_id, pet_id)
 );
 

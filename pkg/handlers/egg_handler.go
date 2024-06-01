@@ -13,6 +13,26 @@ type eggResponse struct {
 	Count  int    `json:"count"`
 }
 
+func (h *Handler) GetEggById(c *gin.Context) {
+	userId, err := h.GetUserId(c)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	eggId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	egg, err := h.services.GetUserEggById(userId, eggId)
+	if err != nil {
+		c.JSON(404, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(200, gin.H{"egg": egg})
+}
+
 func (h *Handler) GetEggs(c *gin.Context) {
 	userId, err := h.GetUserId(c)
 	if err != nil {

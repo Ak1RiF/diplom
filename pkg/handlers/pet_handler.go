@@ -59,9 +59,40 @@ func (h *Handler) PostPets(c *gin.Context) {
 		c.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
-	if err = h.services.AddPetToUser(userId, petId); err != nil {
+	var inputName dtos.InputNamePet
+	if err := c.ShouldBindJSON(&inputName); err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err = h.services.AddPetToUser(userId, petId, inputName.Name); err != nil {
 		c.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
 	c.JSON(201, gin.H{"message": "User has pet"})
+}
+
+func (h *Handler) ChangeNamePet(c *gin.Context) {
+	userId, err := h.GetUserId(c)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	petId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	var inputName dtos.InputNamePet
+	if err := c.ShouldBindJSON(&inputName); err != nil {
+		c.JSON(400, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := h.services.ChangePetName(userId, petId, inputName.Name); err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(201, gin.H{"message": "The pet has been updated"})
 }

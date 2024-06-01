@@ -22,19 +22,20 @@ func (h *Handler) AllQuests(c *gin.Context) {
 		return
 	}
 
-	if len(quests) == 0 {
-		c.JSON(200, gin.H{"quests": []*dtos.InputQuestDto{}})
-		return
-	}
-
 	for _, v := range quests {
 		if v.Completed == false {
 			output = append(output, v)
 		}
 	}
 
+	if len(output) == 0 {
+		c.JSON(200, gin.H{"quests": []*dtos.OutputInputDto{}})
+		return
+	}
+
 	c.JSON(200, gin.H{"quests": output})
 }
+
 func (h *Handler) ByIdQuest(c *gin.Context) {
 	questId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -164,5 +165,5 @@ func (h *Handler) GetCompletedQuests(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"completed_quests": completedQuests})
+	c.JSON(200, gin.H{"quests": completedQuests})
 }

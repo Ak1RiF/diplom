@@ -59,11 +59,32 @@ func (r *PetRepository) GetById(petId, userId int) (*models.Pet, error) {
 
 	return &pet, nil
 }
-func (r *PetRepository) AddToUser(petId, userId int) error {
-	query := `INSERT INTO users_pets (user_id, pet_id) VALUES ($1, $2)`
+func (r *PetRepository) AddToUser(petId, userId int, name string) error {
+	query := `INSERT INTO users_pets (user_id, pet_id, name_pet) VALUES ($1, $2, $3)`
 
-	_, err := r.db.Exec(context.Background(), query, userId, petId)
+	_, err := r.db.Exec(context.Background(), query, userId, petId, name)
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *PetRepository) GetNamePet(petId, userId int) (string, error) {
+	var name string
+
+	query := `SELECT name_pet FROM users_pets WHERE pet_id=$1 AND user_id=$2`
+	row := r.db.QueryRow(context.Background(), query, userId, petId)
+
+	if err := row.Scan(&name); err != nil {
+		return "", err
+	}
+
+	return name, nil
+}
+
+func (r *PetRepository) ChangeName(petId, userId int, name string) error {
+	query := `UPDATE users_pets SET name_pet=$1 WHERE pet_id=$2 AND user_id=$3`
+	if _, err := r.db.Exec(context.Background(), query, name, petId, userId); err != nil {
 		return err
 	}
 	return nil

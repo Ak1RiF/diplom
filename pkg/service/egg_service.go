@@ -14,22 +14,26 @@ func NewEggService(repo repository.Eggs) *EggService {
 		eggRepository: repo,
 	}
 }
+func (s *EggService) GetUserEggById(userId, eggId int) (*dtos.OutputEgg, error) {
+	counts, err := s.eggRepository.Get(userId)
+	if err != nil {
+		return nil, err
+	}
+	switch eggId - 1 {
+	case 0:
+		return &dtos.OutputEgg{Id: 1, Rarity: "common", Count: counts[0]}, nil
+	case 1:
+		return &dtos.OutputEgg{Id: 2, Rarity: "rare", Count: counts[1]}, nil
+	case 2:
+		return &dtos.OutputEgg{Id: 3, Rarity: "epic", Count: counts[2]}, nil
+	case 3:
+		return &dtos.OutputEgg{Id: 4, Rarity: "legendary", Count: counts[3]}, nil
+	default:
+		return nil, err
+	}
+}
 
 func (s *EggService) GetUserEggs(userId int) (*dtos.OutputEggs, error) {
-	// eggs, err := s.eggRepository.Get(userId)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// var eggsOutput []*dtos.OutputEgg
-	// for _, v := range eggs {
-	// 	eggDto := dtos.OutputEgg{
-	// 		Rarity: v.Rarity,
-	// 	}
-
-	// 	eggsOutput = append(eggsOutput, &eggDto)
-	// }
-
-	// return eggsOutput, nil
 	counts, err := s.eggRepository.Get(userId)
 	if err != nil {
 		return nil, err

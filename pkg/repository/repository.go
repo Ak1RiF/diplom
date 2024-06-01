@@ -28,7 +28,9 @@ type Quests interface {
 type Pets interface {
 	Get(userId int) ([]models.Pet, error)
 	GetById(petId, userId int) (*models.Pet, error)
-	AddToUser(petId, userId int) error
+	GetNamePet(petId, userId int) (string, error)
+	AddToUser(petId, userId int, name string) error
+	ChangeName(petId, userId int, name string) error
 }
 
 type Eggs interface {

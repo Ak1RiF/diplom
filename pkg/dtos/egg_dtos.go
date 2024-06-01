@@ -7,6 +7,12 @@ type OutputEggs struct {
 	CountLegendary int `json:"legendary"`
 }
 
+type OutputEgg struct {
+	Id     int    `json:"id"`
+	Count  int    `json:"count"`
+	Rarity string `json:"rarity"`
+}
+
 type CountEggsInput struct {
 	Count int `json:"count"`
 }
