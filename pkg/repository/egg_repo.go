@@ -78,3 +78,14 @@ func (r *EggRepository) RemoveFromCount(eggId, userId int) error {
 	}
 	return nil
 }
+
+func (r *EggRepository) GetCountById(eggId, userId int) (int, error) {
+	var count int
+
+	query := `SELECT count_eggs FROM users_eggs WHERE egg_id=$1 AND user_id=$2`
+	if err := r.db.QueryRow(context.Background(), query, eggId, userId).Scan(&count); err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

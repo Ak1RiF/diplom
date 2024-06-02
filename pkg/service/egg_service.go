@@ -64,14 +64,22 @@ func (s *EggService) AddEggToUser(userId, eggId int) error {
 //		return nil
 //	}
 func (s *EggService) UpdateCountEggs(userId, eggId int, operation string) error {
+	count, err := s.eggRepository.GetCountById(eggId, userId)
+	if err != nil {
+		return err
+	}
 	switch operation {
 	case "add":
 		if err := s.eggRepository.AddToCount(eggId, userId); err != nil {
 			return err
 		}
 	case "remove":
-		if err := s.eggRepository.RemoveFromCount(eggId, userId); err != nil {
-			return err
+		if count >= 1 {
+			if err := s.eggRepository.RemoveFromCount(eggId, userId); err != nil {
+				return err
+			}
+		} else {
+			return errors.New("The count of eggs cannot be less than 0")
 		}
 	default:
 		return errors.New("Unknown type of operation")

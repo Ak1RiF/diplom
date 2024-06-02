@@ -39,6 +39,7 @@ type Pets interface {
 type Eggs interface {
 	Get(userId int) ([]int, error)
 	AddToUser(eggId, userId int) error
+	GetCountById(eggId, userId int) (int, error)
 	UpdateCount(count, eggId, userId int) error
 	AddToCount(eggId, userId int) error
 	RemoveFromCount(eggId, userId int) error
