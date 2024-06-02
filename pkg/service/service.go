@@ -30,8 +30,8 @@ type Quests interface {
 type Pets interface {
 	GetUserPets(userId int) ([]*dtos.OutputPet, error)
 	GetUserPet(userId, petId int) (*dtos.OutputPet, error)
-	AddPetToUser(userId, petId int, name string) error
-	ChangePetName(userId, petId int, name string) error
+	CreatePetToUser(userId int, input dtos.CreatePet) error
+	ChangePet(userId int, input dtos.UpdatePet) error
 }
 
 type Eggs interface {

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/todoApp/pkg/dtos"
+	"github.com/todoApp/pkg/models"
 	"github.com/todoApp/pkg/repository"
 )
 
@@ -20,10 +21,9 @@ func (s *PetService) GetUserPets(userId int) ([]*dtos.OutputPet, error) {
 	}
 	var petsOutput []*dtos.OutputPet
 	for _, v := range pets {
-		name, _ := s.GetNameOfPet(userId, v.Id)
 		petDto := dtos.OutputPet{
 			Id:     v.Id,
-			Name:   name,
+			Name:   v.Name,
 			Rarity: v.Rarity,
 		}
 
@@ -37,33 +37,31 @@ func (s *PetService) GetUserPet(userId, petId int) (*dtos.OutputPet, error) {
 	if err != nil {
 		return nil, err
 	}
-	name, _ := s.GetNameOfPet(userId, petId)
 	petOutput := dtos.OutputPet{
 		Id:     pet.Id,
-		Name:   name,
+		Name:   pet.Name,
 		Rarity: pet.Rarity,
 	}
 
 	return &petOutput, nil
 }
-func (s *PetService) AddPetToUser(userId, petId int, name string) error {
-	if err := s.petRepository.AddToUser(petId, userId, name); err != nil {
+
+func (s *PetService) CreatePetToUser(userId int, input dtos.CreatePet) error {
+	if err := s.petRepository.Create(userId, models.Pet{Name: input.Name, Rarity: input.Rarity}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *PetService) ChangePetName(userId, petId int, name string) error {
-	if err := s.petRepository.ChangeName(petId, userId, name); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *PetService) GetNameOfPet(userId, petId int) (string, error) {
-	name, err := s.petRepository.GetNamePet(petId, userId)
+func (s *PetService) ChangePet(userId int, input dtos.UpdatePet) error {
+	pet, err := s.petRepository.GetById(input.Id, userId)
 	if err != nil {
-		return "", err
+		return err
 	}
-	return name, nil
+
+	pet.Name = input.Name
+	if err := s.petRepository.Update(pet.Id, userId, *pet); err != nil {
+		return err
+	}
+	return nil
 }

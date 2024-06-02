@@ -21,7 +21,8 @@ CREATE TABLE quests(
 CREATE TABLE pets(
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
-    rarity VARCHAR(255) NOT NULL
+    rarity VARCHAR(255) NOT NULL,
+    user_id INT REFERENCES users(id)
 );
 
 
@@ -35,14 +36,6 @@ CREATE TABLE users_eggs(
     egg_id INT REFERENCES eggs(id) ON DELETE CASCADE,
     count_eggs INT DEFAULT 0,
     PRIMARY KEY (user_id, egg_id)
-);
-
-
-CREATE TABLE users_pets(
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    pet_id INT REFERENCES pets(id) ON DELETE CASCADE,
-    name_pet VARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_id, pet_id)
 );
 
 

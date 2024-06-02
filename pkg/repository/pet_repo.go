@@ -23,10 +23,10 @@ func NewPetRepository(databaseUrl string) *PetRepository {
 	}
 }
 
-func (r *PetRepository) Get(userId int) ([]models.Pet, error) {
-	var pets []models.Pet
+func (r *PetRepository) Get(userId int) ([]*models.Pet, error) {
+	var pets []*models.Pet
 
-	query := `SELECT p.id, p.name, p.rarity FROM pets p JOIN users_pets up ON p.id = up.pet_id WHERE up.user_id = $1`
+	query := `SELECT id, name, rarity FROM pets WHERE user_id=$1`
 
 	rows, err := r.db.Query(context.Background(), query, userId)
 	if err != nil {
@@ -37,28 +37,42 @@ func (r *PetRepository) Get(userId int) ([]models.Pet, error) {
 	for rows.Next() {
 		var pet models.Pet
 
-		err := rows.Scan(&pet.Id, &pet.Name, &pet.Rarity)
-		if err != nil {
+		if err := rows.Scan(&pet.Id, &pet.Name, &pet.Rarity); err != nil {
 			continue
 		}
-		pets = append(pets, pet)
+		pets = append(pets, &pet)
 	}
-
 	return pets, nil
 }
 
 func (r *PetRepository) GetById(petId, userId int) (*models.Pet, error) {
 	var pet models.Pet
 
-	query := `SELECT p.id, p.name, p.rarity FROM pets p JOIN users_pets up ON p.id = up.pet_id WHERE up.user_id = $1 AND p.id = $2`
+	query := `SELECT id, name, rarity FROM pets WHERE id=$1 AND user_id=$2`
 
-	row := r.db.QueryRow(context.Background(), query, userId, petId)
+	row := r.db.QueryRow(context.Background(), query, petId, userId)
 	if err := row.Scan(&pet.Id, &pet.Name, &pet.Rarity); err != nil {
 		return nil, err
 	}
-
 	return &pet, nil
 }
+
+func (r *PetRepository) Create(userId int, pet models.Pet) error {
+	query := `INSERT INTO pets (name, rarity, user_id) VALUES ($1,$2,$3)`
+	if _, err := r.db.Exec(context.Background(), query, pet.Name, pet.Rarity, userId); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *PetRepository) Update(id, userId int, pet models.Pet) error {
+	query := `UPDATE pets SET name=$1 WHERE id=$2 AND user_id=$3`
+	if _, err := r.db.Exec(context.Background(), query, pet.Name, id, userId); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *PetRepository) AddToUser(petId, userId int, name string) error {
 	query := `INSERT INTO users_pets (user_id, pet_id, name_pet) VALUES ($1, $2, $3)`
 

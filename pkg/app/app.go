@@ -89,8 +89,8 @@ func Start() {
 			{
 				pets.GET("/", handler.GetPets)
 				pets.GET("/:id", handler.GetPetsById)
-				pets.POST("/:id", handler.PostPets)
-				pets.PUT("/:id", handler.ChangeNamePet)
+				pets.POST("/", handler.PostPets)
+				pets.PUT("/", handler.UpdatePet)
 			}
 			// eggs
 			eggs := protected.Group("/eggs")
