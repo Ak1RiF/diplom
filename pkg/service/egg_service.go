@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/todoApp/pkg/dtos"
 	"github.com/todoApp/pkg/repository"
 )
@@ -56,9 +57,24 @@ func (s *EggService) AddEggToUser(userId, eggId int) error {
 	return nil
 }
 
-func (s *EggService) UpdateCountEggs(count, eggId, userId int) error {
-	if err := s.eggRepository.UpdateCount(count, eggId, userId); err != nil {
-		return err
+//	func (s *EggService) UpdateCountEggs(count, eggId, userId int) error {
+//		if err := s.eggRepository.UpdateCount(count, eggId, userId); err != nil {
+//			return err
+//		}
+//		return nil
+//	}
+func (s *EggService) UpdateCountEggs(userId, eggId int, operation string) error {
+	switch operation {
+	case "add":
+		if err := s.eggRepository.AddToCount(eggId, userId); err != nil {
+			return err
+		}
+	case "remove":
+		if err := s.eggRepository.RemoveFromCount(eggId, userId); err != nil {
+			return err
+		}
+	default:
+		return errors.New("Unknown type of operation")
 	}
 	return nil
 }

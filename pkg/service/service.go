@@ -38,7 +38,7 @@ type Eggs interface {
 	GetUserEggById(userId, eggId int) (*dtos.OutputEgg, error)
 	GetUserEggs(userId int) (*dtos.OutputEggs, error)
 	AddEggToUser(userId, eggId int) error
-	UpdateCountEggs(count, eggId, userId int) error
+	UpdateCountEggs(userId, eggId int, operation string) error
 }
 
 // Service struct

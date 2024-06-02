@@ -4,7 +4,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/todoApp/pkg/dtos"
 )
 
 type eggResponse struct {
@@ -55,9 +54,7 @@ func (h *Handler) GetEggs(c *gin.Context) {
 	c.JSON(200, gin.H{"user_eggs": response})
 }
 
-func (h *Handler) UpdateCount(c *gin.Context) {
-	var request dtos.CountEggsInput
-
+func (h *Handler) AddToCount(c *gin.Context) {
 	eggId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
@@ -70,12 +67,27 @@ func (h *Handler) UpdateCount(c *gin.Context) {
 		return
 	}
 
-	if err := c.ShouldBindJSON(&request); err != nil {
+	if err := h.services.UpdateCountEggs(userId, eggId, "add"); err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(200, "Ok!")
+}
+
+func (h *Handler) RemoveFromCount(c *gin.Context) {
+	eggId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
-	if err := h.services.UpdateCountEggs(request.Count, eggId, userId); err != nil {
+	userId, err := h.GetUserId(c)
+	if err != nil {
+		c.JSON(500, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := h.services.UpdateCountEggs(userId, eggId, "remove"); err != nil {
 		c.JSON(500, gin.H{"message": err.Error()})
 		return
 	}

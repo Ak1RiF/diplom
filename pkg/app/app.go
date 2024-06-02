@@ -97,7 +97,8 @@ func Start() {
 			{
 				eggs.GET("/", handler.GetEggs)
 				eggs.GET("/:id", handler.GetEggById)
-				eggs.PUT("/:id", handler.UpdateCount)
+				eggs.PUT("/add/:id", handler.AddToCount)
+				eggs.PUT("/remove/:id", handler.RemoveFromCount)
 			}
 		}
 	}

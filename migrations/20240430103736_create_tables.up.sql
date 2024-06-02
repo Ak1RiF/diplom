@@ -20,7 +20,7 @@ CREATE TABLE quests(
 
 CREATE TABLE pets(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
     rarity VARCHAR(255) NOT NULL,
     user_id INT REFERENCES users(id)
 );

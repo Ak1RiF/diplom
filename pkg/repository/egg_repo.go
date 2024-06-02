@@ -63,3 +63,18 @@ func (r *EggRepository) UpdateCount(count, eggId, userId int) error {
 	}
 	return nil
 }
+
+func (r *EggRepository) AddToCount(eggId, userId int) error {
+	query := `UPDATE users_eggs SET count_eggs = count_eggs + 1 WHERE egg_id=$1 AND user_id=$2`
+	if _, err := r.db.Exec(context.Background(), query, eggId, userId); err != nil {
+		return err
+	}
+	return nil
+}
+func (r *EggRepository) RemoveFromCount(eggId, userId int) error {
+	query := `UPDATE users_eggs SET count_eggs = count_eggs - 1 WHERE egg_id=$1 AND user_id=$2`
+	if _, err := r.db.Exec(context.Background(), query, eggId, userId); err != nil {
+		return err
+	}
+	return nil
+}
